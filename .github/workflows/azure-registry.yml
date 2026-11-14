@@ -52,16 +52,6 @@ jobs:
           docker save \
             ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
             -o image.tar
-
-  # ─────────────────────────────────────────────
-  # Job 3: Publicar imagen en ACR
-  # ─────────────────────────────────────────────
-  publish-image:
-    name: Publish Image → ACR
-    runs-on: ubuntu-latest
-   
-
-    steps:
       - name: Descargar imagen Docker
         uses: actions/download-artifact@v4
         with:
@@ -87,3 +77,4 @@ jobs:
 
       - name: Logout del registry
         run: docker logout ${{ env.ACR_REGISTRY }}
+
