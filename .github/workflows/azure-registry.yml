@@ -43,7 +43,7 @@ jobs:
 
 
       - name: Build The Docker Image
-        run: docker build -t $IMAGE_NAME:latest 
+        run: docker build -t $IMAGE_NAME:latest .
         
       - name: Exportar imagen Docker
         run: |
