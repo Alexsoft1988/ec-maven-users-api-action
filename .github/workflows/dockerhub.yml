@@ -37,7 +37,7 @@ jobs:
           retention-days: 1
           
       - name: Login to Dockerhub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_NAME }}" --password-stdin
 
       - name: Set Image Name
         id: vars
