@@ -33,30 +33,30 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Subir artefacto JAR
-        uses: actions/upload-artifact@v7
-        with:
-          name: app-jar
-          path: target/*.jar
-          if-no-files-found: error
-          retention-days: 1
-
       - name: Build de la imagen Docker
         run: |
           docker build \
             -t ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
             -f ${{ env.DOCKERFILE_PATH }} .
-        
+
+         
       - name: Exportar imagen Docker
         run: |
           docker save \
             ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
             -o image.tar
             
+      - name: Subir imagen como artefacto
+        uses: actions/upload-artifact@v7
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1            
+            
       - name: Descargar imagen Docker
         uses: actions/download-artifact@v7
         with:
-          name: app-jar
+          name: docker-image
 
       - name: Cargar imagen en Docker
         run: docker load -i image.tar
