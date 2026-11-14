@@ -52,10 +52,11 @@ jobs:
           docker save \
             ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
             -o image.tar
+            
       - name: Descargar imagen Docker
         uses: actions/download-artifact@v7
         with:
-          name: docker-image
+          name: app-jar
 
       - name: Cargar imagen en Docker
         run: docker load -i image.tar
