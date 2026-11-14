@@ -41,7 +41,7 @@ jobs:
 
       - name: Set Image Name
         id: vars
-        run: echo "IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/$(basename ${{ github.repository}})" > "$GITHUB_ENV"
+        run: echo "IMAGE_NAME=${{ secrets.DOCKERHUB_NAME }}/$(basename ${{ github.repository}})" > "$GITHUB_ENV"
         
       - name: Build The Docker Image
         run: docker build -t $IMAGE_NAME:latest .
