@@ -1,0 +1,52 @@
+name: workflow azure-registry
+
+on:
+  push:
+    branches: [ "main" ]
+
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch: 
+env:
+  IMAGE_NAME:      aplicacion-Java-AGC
+  IMAGE_TAG:       latest
+  DOCKERFILE_PATH: Dockerfile
+  ACR_REGISTRY:    cregatceastus01.azurecr.io
+  
+jobs:
+  build:
+    name: Construir
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v6
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Subir artefacto JAR
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-jar
+          path: target/*.jar
+          if-no-files-found: error
+          retention-days: 1
+
+
+      - name: Build The Docker Image
+        run: docker build -t $IMAGE_NAME:latest 
+        
+      - name: Exportar imagen Docker
+        run: |
+          docker save \
+            ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            -o image.tar
