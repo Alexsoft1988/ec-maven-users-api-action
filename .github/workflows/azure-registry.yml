@@ -41,9 +41,11 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-
-      - name: Build The Docker Image
-        run: docker build -t $IMAGE_NAME:latest .
+      - name: Build de la imagen Docker
+        run: |
+          docker build \
+            -t ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            -f ${{ env.DOCKERFILE_PATH }} .
         
       - name: Exportar imagen Docker
         run: |
